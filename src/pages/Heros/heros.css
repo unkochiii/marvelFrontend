@@ -19,7 +19,8 @@ article {
 article > img {
   width: 80%;
   height: 275px;
-  object-fit: start;
+  object-fit: cover;
+  object-position: left;
 }
 
 .description {

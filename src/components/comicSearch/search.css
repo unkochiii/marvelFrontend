@@ -4,6 +4,7 @@ input {
   height: 15px;
   width: 300px;
   padding: 10px;
+  color: blue;
 }
 
 input::placeholder {
