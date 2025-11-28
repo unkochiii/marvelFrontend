@@ -1,0 +1,36 @@
+img {
+  height: 50px;
+}
+header {
+  background-color: #ed1d24;
+  width: 1853px;
+}
+header > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  height: 80px;
+  max-width: 1230px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 320px;
+}
+
+button {
+  border: #861418 2px solid;
+  border-radius: 99px;
+  height: 40px;
+  font-size: 16px;
+  color: #861418;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #861418;
+  color: white;
+  border: white 2px solid;
+}

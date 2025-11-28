@@ -1,0 +1,8 @@
+.container .hero {
+  display: flex;
+}
+
+article {
+  border: red solid 2px;
+  width: 150px;
+}
