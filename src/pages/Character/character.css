@@ -1,0 +1,30 @@
+.comics-grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 1250px;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 20px;
+}
+
+.character-image {
+  width: 400px;
+  height: auto;
+  border-radius: 15px;
+}
+
+.character-detail > h1 {
+  font-size: 35px;
+}
+
+.description {
+  padding-left: 60px;
+}
+.description > p {
+  color: black;
+  padding-left: 0px;
+}
+.details {
+  display: flex;
+  justify-content: space-between;
+}

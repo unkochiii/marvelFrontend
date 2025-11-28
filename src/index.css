@@ -1,5 +1,43 @@
+@font-face {
+  font-family: "MaPolice";
+  src: url("./assets/fonts/Hey\ Comic.otf") format("opentype"),
+    url("./assets/fonts/Hey\ Comic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Heroes";
+  src: url("./assets/fonts/Heroes.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Black";
+  src: url("./assets/fonts/Black.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   display: flex;
   justify-content: center;
   margin: 0;
 }
+* {
+  font-family: "MaPolice", sans-serif;
+}
+
+h1 {
+  font-family: "Black";
+  /* font-family: "Heroes"; */
+  font-size: 25px;
+}
+
+/* body > div {
+  background-image: url("./assets/images/hi.jpeg"),
+    url("./assets/images/hi2.jpeg");
+  background-size: 300px auto, 300px auto;
+  background-position: left, right;
+  background-repeat: no-repeat, no-repeat;
+  min-height: 100vh;
+} */

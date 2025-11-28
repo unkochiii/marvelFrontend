@@ -2,26 +2,44 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 20px;
+  gap: 30px;
 }
 
 article {
-  border: green solid 2px;
   width: 276px;
   height: 400px;
   display: flex;
   align-items: center;
   flex-direction: column;
   border-radius: 15px;
-  box-shadow: 0px 8px 15px rgb(0, 0, 0);
+  box-shadow: 0px 4px 15px rgba(82, 82, 82, 0.788);
+  justify-content: space-evenly;
+  overflow: hidden;
+  background-color: white;
+}
+
+article:hover {
+  width: 276px;
+  height: auto;
+  overflow: visible;
+}
+article:hover > img {
+  height: 50%;
 }
 
 article > img {
-  width: 80%;
-  height: 275px;
-  object-fit: start;
+  height: 55%;
+  object-fit: contain;
+  border-radius: 15px;
 }
 
 .description {
   overflow: hidden;
+  font-size: 15px;
+  color: black;
+}
+
+h1 {
+  font-size: 20px;
+  color: rgb(0, 0, 82);
 }

@@ -2,12 +2,12 @@ import Hero from "../../assets/images/hero.jpeg";
 import "./home.css";
 const Home = () => {
   return (
-    <>
+    <main>
       <div className="container home">
         <div>
           <h1>
             Marvel Explorer : <br /> Portail d'exploration de l'univers
-          </h1>{" "}
+          </h1>
           <p>
             Je présente Marvel Explorer, une application web responsive conçue
             pour mon portfolio. <br />
@@ -61,7 +61,7 @@ const Home = () => {
         </div>
         <img src={Hero} alt="deadpool qui t'aime" className="hero" />
       </div>
-    </>
+    </main>
   );
 };
 

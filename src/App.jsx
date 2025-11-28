@@ -5,7 +5,6 @@ import Home from "./pages/Home/Home";
 import Heros from "./pages/Heros/Heros";
 import Comics from "./pages/Comics/Comics";
 import Character from "./pages/Character/Character";
-import Comic from "./pages/Comic/Comic";
 import HeroPlay from "./pages/heroPlay/heroPlay";
 import Fav from "./pages/Fav/Fav";
 
@@ -22,9 +21,7 @@ function App() {
           {/* afficher tous les comics */}
           <Route path="/comics" element={<Comics />} />
           {/* afficher les infos d'un personnage */}
-          <Route path="/character" element={<Character />} />
-          {/* afficher les infos d'un comic */}
-          <Route path="/comic" element={<Comic />} />
+          <Route path="/character/:id" element={<Character />} />
           {/* afficher tous les comics où on retrouve un personnage */}
           <Route path="/heroPlay" element={<HeroPlay />} />
           {/* afficher tous favoris*/}

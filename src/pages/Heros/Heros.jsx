@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import getImageUrl from "../../assets/utils/getImgaeUrl";
 import "./heros.css";
 
@@ -8,6 +9,8 @@ const Heros = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+  const [characters, setCharacters] = useState([]);
 
   // Fetch all data on mount
   useEffect(() => {
@@ -78,6 +81,9 @@ const Heros = () => {
       setFilteredData(sorted);
     }
   }, [search, allData]);
+  const handleCharacterClick = (characterId) => {
+    navigate(`/character/${characterId}`);
+  };
 
   return (
     <div className="container heros">
@@ -87,8 +93,12 @@ const Heros = () => {
         <main>
           {filteredData.map((character) => {
             return (
-              <article key={character._id}>
-                <p>{character.name}</p>
+              <article
+                key={character._id}
+                onClick={() => handleCharacterClick(character._id)}
+                style={{ cursor: "pointer" }}
+              >
+                <h1>{character.name}</h1>
 
                 <img src={getImageUrl(character.thumbnail)} alt="" />
                 <p className="description">{character.description}</p>

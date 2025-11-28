@@ -88,7 +88,7 @@ const Comics = () => {
           {filteredData.map((comic) => {
             return (
               <article key={comic._id}>
-                <p>{comic.title}</p>
+                <h1>{comic.title}</h1>
 
                 <img src={getImageUrl(comic.thumbnail)} alt="" />
                 <p className="description">{comic.description}</p>

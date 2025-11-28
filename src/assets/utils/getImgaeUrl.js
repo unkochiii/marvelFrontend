@@ -1,5 +1,5 @@
 const getImageUrl = (thumbnail) => {
-  return `${thumbnail.path}.${thumbnail.extension}`;
+  return `${thumbnail.path}/portrait_uncanny.${thumbnail.extension}`;
 };
 
 export default getImageUrl;
