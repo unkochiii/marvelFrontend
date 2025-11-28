@@ -4,24 +4,80 @@ import getImageUrl from "../../assets/utils/getImgaeUrl";
 import "./heros.css";
 
 const Heros = () => {
-  const [data, setData] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
+  // Fetch all data on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://site--marvelbackend--t4nqvl4d28d8.code.run/characters"
+          "https://site--marvelbackend--t4nqvl4d28d8.code.run/characters"
         );
-        console.log(response.data);
+        const payload = response.data;
+        // Normalize payload so results is always an array
+        const results =
+          payload && payload.results
+            ? payload.results
+            : Array.isArray(payload)
+            ? payload
+            : [];
+        setAllData(results);
+        setFilteredData(results);
         setIsLoading(false);
-        setData(response.data);
       } catch (error) {
         console.log(error.message);
+        setIsLoading(false);
       }
     };
     fetchData();
   }, []);
+
+  // Listen to localStorage changes for search term
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const searchTerm = localStorage.getItem("search") || "";
+      setSearch(searchTerm);
+    };
+
+    // Set initial search term
+    handleStorageChange();
+
+    // Listen for storage changes from other tabs/windows
+    window.addEventListener("storage", handleStorageChange);
+
+    // Polling for same-tab changes (localStorage doesn't fire on same tab)
+    const interval = setInterval(handleStorageChange, 100);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Filter data whenever search term changes
+  useEffect(() => {
+    if (!search) {
+      setFilteredData(allData);
+    } else {
+      const lowerSearch = search.toLowerCase();
+      // Filter by title only
+      const filtered = allData.filter((character) =>
+        character.name.toLowerCase().includes(lowerSearch)
+      );
+      // Sort: startsWith first, then contains
+      const sorted = filtered.sort((a, b) => {
+        const aStartsWith = a.name.toLowerCase().startsWith(lowerSearch);
+        const bStartsWith = b.name.toLowerCase().startsWith(lowerSearch);
+        if (aStartsWith && !bStartsWith) return -1;
+        if (!aStartsWith && bStartsWith) return 1;
+        return 0;
+      });
+      setFilteredData(sorted);
+    }
+  }, [search, allData]);
 
   return (
     <div className="container heros">
@@ -29,12 +85,13 @@ const Heros = () => {
         <p>Loading ...</p>
       ) : (
         <main>
-          {data.results.map((character) => {
+          {filteredData.map((character) => {
             return (
               <article key={character._id}>
                 <p>{character.name}</p>
-                <p>{character.description}</p>
+
                 <img src={getImageUrl(character.thumbnail)} alt="" />
+                <p className="description">{character.description}</p>
               </article>
             );
           })}

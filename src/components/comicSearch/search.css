@@ -1,0 +1,11 @@
+input {
+  border: rgb(255, 251, 0) solid 5px;
+  border-radius: 99px;
+  height: 15px;
+  width: 300px;
+  padding: 10px;
+}
+
+input::placeholder {
+  color: blue;
+}

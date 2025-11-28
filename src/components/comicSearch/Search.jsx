@@ -1,3 +1,4 @@
+import "./search.css";
 const Search = ({ setSearch, search }) => {
   return (
     <>
@@ -5,7 +6,7 @@ const Search = ({ setSearch, search }) => {
         type="text"
         id="search"
         value={search}
-        placeholder="%% question ou exemple %%"
+        placeholder="chercher un comic"
         onChange={(event) => {
           setSearch(event.target.value);
         }}

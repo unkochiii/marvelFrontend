@@ -1,6 +1,7 @@
 .container {
-  border: 2px solid black;
+  /* border: 2px solid black; */
   display: flex;
   width: 1250px;
   margin: 0 auto;
+  padding-top: 25px;
 }

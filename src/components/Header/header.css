@@ -4,19 +4,21 @@ img {
 header {
   background-color: #ed1d24;
   width: 1853px;
+  display: flex;
+  justify-content: center;
 }
 header > div {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
   height: 80px;
-  max-width: 1230px;
+  width: 1250px;
+  border-bottom: 2px #861418 solid;
 }
 
 .buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 320px;
 }
 
@@ -24,13 +26,15 @@ button {
   border: #861418 2px solid;
   border-radius: 99px;
   height: 40px;
+  padding: 10px;
   font-size: 16px;
   color: #861418;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #861418;
-  color: white;
-  border: white 2px solid;
+  background-color: blue;
+  color: yellow;
+  border: yellow 2px solid;
+  font-weight: bold;
 }
