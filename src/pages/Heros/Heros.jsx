@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import getImageUrl from "../../assets/utils/getImgaeUrl";
 import "./heros.css";
+import FavoriteButton from "../../components/FavoriteButton/FavoriteButton";
 
-const Heros = () => {
+const Heros = ({ toggleFavorite, isFavorite }) => {
   const [allData, setAllData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-  const [characters, setCharacters] = useState([]);
 
   // Fetch all data on mount
   useEffect(() => {
@@ -19,14 +19,8 @@ const Heros = () => {
         const response = await axios.get(
           "https://site--marvelbackend--t4nqvl4d28d8.code.run/characters"
         );
-        const payload = response.data;
-        // Normalize payload so results is always an array
-        const results =
-          payload && payload.results
-            ? payload.results
-            : Array.isArray(payload)
-            ? payload
-            : [];
+
+        const results = response.data.results; // ← Correction ici
         setAllData(results);
         setFilteredData(results);
         setIsLoading(false);
@@ -81,6 +75,7 @@ const Heros = () => {
       setFilteredData(sorted);
     }
   }, [search, allData]);
+
   const handleCharacterClick = (characterId) => {
     navigate(`/character/${characterId}`);
   };
@@ -96,11 +91,19 @@ const Heros = () => {
               <article
                 key={character._id}
                 onClick={() => handleCharacterClick(character._id)}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", position: "relative" }} // ← Ajout de position relative
               >
-                <h1>{character.name}</h1>
+                <FavoriteButton
+                  item={character}
+                  isFavorite={isFavorite}
+                  toggleFavorite={toggleFavorite}
+                />
 
-                <img src={getImageUrl(character.thumbnail)} alt="" />
+                <h1>{character.name}</h1>
+                <img
+                  src={getImageUrl(character.thumbnail)}
+                  alt={character.name}
+                />
                 <p className="description">{character.description}</p>
               </article>
             );

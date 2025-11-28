@@ -2,8 +2,9 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./character.css";
+import FavoriteButton from "../../components/FavoriteButton/FavoriteButton";
 
-const Character = () => {
+const Character = ({ toggleFavorite, isFavorite }) => {
   const { id } = useParams();
   const [character, setCharacter] = useState(null);
   const [comics, setComics] = useState([]); // État séparé pour les comics

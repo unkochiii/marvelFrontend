@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   width: 1250px;
   justify-content: space-between;
-  gap: 25px;
+  gap: 20px;
   margin-bottom: 20px;
 }
 
@@ -27,4 +27,12 @@
 .details {
   display: flex;
   justify-content: space-between;
+}
+
+.comic-card > h3 {
+  font-size: 15px;
+}
+
+.comic-card {
+  padding: 10px;
 }

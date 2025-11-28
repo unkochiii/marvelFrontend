@@ -2,8 +2,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import getImageUrl from "../../assets/utils/getImgaeUrl";
 import "./comics.css";
+import FavoriteButton from "../../components/FavoriteButton/FavoriteButton";
 
-const Comics = () => {
+const Comics = ({ toggleFavorite, isFavorite }) => {
   const [allData, setAllData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -16,14 +17,8 @@ const Comics = () => {
         const response = await axios.get(
           "https://site--marvelbackend--t4nqvl4d28d8.code.run/comics"
         );
-        const payload = response.data;
-        // Normalize payload so results is always an array
-        const results =
-          payload && payload.results
-            ? payload.results
-            : Array.isArray(payload)
-            ? payload
-            : [];
+
+        const results = response.data.results; // ← Correction ici
         setAllData(results);
         setFilteredData(results);
         setIsLoading(false);
@@ -87,10 +82,15 @@ const Comics = () => {
         <main>
           {filteredData.map((comic) => {
             return (
-              <article key={comic._id}>
-                <h1>{comic.title}</h1>
+              <article key={comic._id} style={{ position: "relative" }}>
+                <FavoriteButton
+                  item={comic}
+                  isFavorite={isFavorite}
+                  toggleFavorite={toggleFavorite}
+                />
 
-                <img src={getImageUrl(comic.thumbnail)} alt="" />
+                <h1>{comic.title}</h1>
+                <img src={getImageUrl(comic.thumbnail)} alt={comic.title} />
                 <p className="description">{comic.description}</p>
               </article>
             );
