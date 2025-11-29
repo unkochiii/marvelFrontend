@@ -6,8 +6,6 @@ import Home from "./pages/Home/Home";
 import Heros from "./pages/Heros/Heros";
 import Comics from "./pages/Comics/Comics";
 import Character from "./pages/Character/Character";
-import HeroPlay from "./pages/heroPlay/heroPlay";
-// ✅ CORRECTION : Importer depuis pages/Fav au lieu de components/FavoriteButton
 import Fav from "./pages/Fav/Fav";
 
 function App() {
@@ -83,17 +81,6 @@ function App() {
             path="/character/:id"
             element={
               <Character
-                toggleFavorite={toggleFavorite}
-                isFavorite={isFavorite}
-              />
-            }
-          />
-
-          {/* afficher tous les comics où on retrouve un personnage */}
-          <Route
-            path="/heroPlay"
-            element={
-              <HeroPlay
                 toggleFavorite={toggleFavorite}
                 isFavorite={isFavorite}
               />

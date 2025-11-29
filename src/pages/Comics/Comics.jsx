@@ -9,18 +9,28 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
-  // Fetch all data on mount
+  const limit = 100; // 100 comics par page
+
+  // Fetch data with pagination
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
+        const skip = (currentPage - 1) * limit; // Si page 5, skip = 4 * 100 = 400
+
         const response = await axios.get(
-          "https://site--marvelbackend--t4nqvl4d28d8.code.run/comics"
+          `https://site--marvelbackend--t4nqvl4d28d8.code.run/comics?skip=${skip}&limit=${limit}`
         );
 
-        const results = response.data.results; // ← Correction ici
+        const results = response.data.results;
+        const count = response.data.count; // Total des comics
+
         setAllData(results);
         setFilteredData(results);
+        setTotalCount(count);
         setIsLoading(false);
       } catch (error) {
         console.log(error.message);
@@ -28,7 +38,7 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [currentPage]); // Re-fetch quand la page change
 
   // Listen to localStorage changes for search term
   useEffect(() => {
@@ -74,28 +84,72 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
     }
   }, [search, allData]);
 
+  const totalPages = Math.ceil(totalCount / limit);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+      window.scrollTo(0, 0); // Scroll to top on page change
+    }
+  };
+
   return (
     <div className="container comics">
       {isLoading ? (
         <p>Loading ...</p>
       ) : (
-        <main>
-          {filteredData.map((comic) => {
-            return (
-              <article key={comic._id} style={{ position: "relative" }}>
-                <FavoriteButton
-                  item={comic}
-                  isFavorite={isFavorite}
-                  toggleFavorite={toggleFavorite}
-                />
+        <>
+          <main>
+            {filteredData.map((comic) => {
+              return (
+                <article key={comic._id} style={{ position: "relative" }}>
+                  <FavoriteButton
+                    item={comic}
+                    isFavorite={isFavorite}
+                    toggleFavorite={toggleFavorite}
+                  />
 
-                <h1>{comic.title}</h1>
-                <img src={getImageUrl(comic.thumbnail)} alt={comic.title} />
-                <p className="description">{comic.description}</p>
-              </article>
-            );
-          })}
-        </main>
+                  <h1>{comic.title}</h1>
+                  <img src={getImageUrl(comic.thumbnail)} alt={comic.title} />
+                  <p className="description">{comic.description}</p>
+                </article>
+              );
+            })}
+            <div className="pagination">
+              <button
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1}
+              >
+                First
+              </button>
+
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+
+              <span className="page-info">
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+
+              <button
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+              >
+                Last
+              </button>
+            </div>
+          </main>
+        </>
       )}
     </div>
   );
