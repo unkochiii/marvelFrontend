@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import Logo from "../../assets/images/logoMarvel.png";
 import HeroSearch from "../heroSearch/Search";
 import ComicSearch from "../comicSearch/Search";
+import Persos from "../../assets/images/users-solid-full.svg";
+import Fav from "../../assets/images/bookmark-solid-full.svg";
+import Movies from "../../assets/images/clapperboard-solid-full.svg";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -34,9 +37,15 @@ const Header = () => {
           )}
         </div>
         <div className="buttons">
-          <button onClick={() => navigate("/characters")}>Personnages</button>
-          <button onClick={() => navigate("/comics")}>Comics</button>
-          <button onClick={() => navigate("/favorite")}>Favoris</button>
+          <button onClick={() => navigate("/characters")}>
+            <img src={Persos} alt="logo users" />
+          </button>
+          <button onClick={() => navigate("/comics")}>
+            <img src={Movies} alt="logo movies" />
+          </button>
+          <button onClick={() => navigate("/favorite")}>
+            <img src={Fav} alt="logo favoris" />
+          </button>
         </div>
       </div>
     </header>

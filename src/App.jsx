@@ -1,6 +1,6 @@
+// src/App.jsx
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
 import Header from "./components/Header/Header";
 import Home from "./pages/Home/Home";
 import Heros from "./pages/Heros/Heros";
@@ -8,97 +8,34 @@ import Comics from "./pages/Comics/Comics";
 import Character from "./pages/Character/Character";
 import Fav from "./pages/Fav/Fav";
 import Footer from "./components/Footer/Footer";
+import { FavoritesProvider } from "./context/FavoritesContext";
 
 function App() {
-  const [favorites, setFavorites] = useState([]);
-
-  // Charger depuis localStorage au démarrage
-  useEffect(() => {
-    const saved = localStorage.getItem("marvelFavorites");
-    if (saved) {
-      setFavorites(JSON.parse(saved));
-    }
-  }, []);
-
-  // Sauvegarder dans localStorage à chaque changement
-  useEffect(() => {
-    localStorage.setItem("marvelFavorites", JSON.stringify(favorites));
-  }, [favorites]);
-
-  // Ajouter un favori
-  const addFavorite = (item) => {
-    setFavorites((prev) => {
-      const exists = prev.find((fav) => fav._id === item._id);
-      if (exists) return prev;
-      return [...prev, item];
-    });
-  };
-
-  // Retirer un favori
-  const removeFavorite = (id) => {
-    setFavorites((prev) => prev.filter((fav) => fav._id !== id));
-  };
-
-  // Vérifier si un item est en favoris
-  const isFavorite = (id) => {
-    return favorites.some((fav) => fav._id === id);
-  };
-
-  // Toggle favori (ajouter ou retirer)
-  const toggleFavorite = (item) => {
-    if (isFavorite(item._id)) {
-      removeFavorite(item._id);
-    } else {
-      addFavorite(item);
-    }
-  };
-
   return (
-    <>
-      <BrowserRouter>
-        <Header favorites={favorites} />
+    <BrowserRouter>
+      {" "}
+      {/* 🔥 Router doit envelopper tout */}
+      <FavoritesProvider>
+        {" "}
+        {/* 🔥 Provider à l'intérieur du Router */}
+        <Header /> {/* 🔥 Plus besoin de passer favorites en prop */}
         <Routes>
           {/* accueil */}
           <Route path="/" element={<Home />} />
-
           {/* afficher tous les personnages */}
-          <Route
-            path="/characters"
-            element={
-              <Heros toggleFavorite={toggleFavorite} isFavorite={isFavorite} />
-            }
-          />
-
+          <Route path="/characters" element={<Heros />} />{" "}
+          {/* 🔥 Plus de props */}
           {/* afficher tous les comics */}
-          <Route
-            path="/comics"
-            element={
-              <Comics toggleFavorite={toggleFavorite} isFavorite={isFavorite} />
-            }
-          />
-
+          <Route path="/comics" element={<Comics />} /> {/* 🔥 Plus de props */}
           {/* afficher les infos d'un personnage */}
-          <Route
-            path="/character/:id"
-            element={
-              <Character
-                toggleFavorite={toggleFavorite}
-                isFavorite={isFavorite}
-              />
-            }
-          />
-
+          <Route path="/character/:id" element={<Character />} />{" "}
+          {/* 🔥 Plus de props */}
           {/* afficher tous favoris*/}
-          <Route
-            path="/favorite"
-            element={
-              <Fav favorites={favorites} removeFavorite={removeFavorite} />
-            }
-          />
+          <Route path="/favorite" element={<Fav />} /> {/* 🔥 Plus de props */}
         </Routes>
         <Footer />
-      </BrowserRouter>
-    </>
+      </FavoritesProvider>
+    </BrowserRouter>
   );
 }
 

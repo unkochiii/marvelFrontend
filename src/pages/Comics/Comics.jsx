@@ -1,20 +1,25 @@
+// src/pages/Comics/Comics.jsx
 import axios from "axios";
-import { useState, useEffect, useRef } from "react"; // 🔥 Ajout de useRef
+import { useState, useEffect, useRef } from "react";
+import { useFavorites } from "../../context/FavoritesContext"; // 🔥 Import ajouté
 import getImageUrl from "../../assets/utils/getImgaeUrl";
 import "./comics.css";
 import FavoriteButton from "../../components/FavoriteButton/FavoriteButton";
 
-const Comics = ({ toggleFavorite, isFavorite }) => {
+const Comics = () => {
+  // 🔥 Plus de props
   const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const previousSearchRef = useRef(""); // 🔥 Ajout du ref
+  const previousSearchRef = useRef("");
+
+  // 🔥 On peut garder cette ligne si besoin ailleurs, sinon on peut la retirer
+  // const { toggleFavorite, isFavorite } = useFavorites();
 
   const limit = 100;
 
-  // Fetch data with pagination AND search
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -22,10 +27,8 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
         let url;
 
         if (search) {
-          // 🔥 MODE RECHERCHE : cherche sur TOUTES les pages
           url = `https://site--marvelbackend--t4nqvl4d28d8.code.run/comics?title=${search}`;
         } else {
-          // 📄 MODE PAGINATION : affiche page par page
           const skip = (currentPage - 1) * limit;
           url = `https://site--marvelbackend--t4nqvl4d28d8.code.run/comics?skip=${skip}&limit=${limit}`;
         }
@@ -41,17 +44,15 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
       }
     };
     fetchData();
-  }, [currentPage, search]); // 🔥 Re-fetch quand currentPage OU search change
+  }, [currentPage, search]);
 
-  // Listen to localStorage changes for search term
   useEffect(() => {
     const handleStorageChange = () => {
       const searchTerm = localStorage.getItem("search") || "";
 
-      // 🔥 Comparer avec la valeur précédente
       if (previousSearchRef.current !== searchTerm) {
         setSearch(searchTerm);
-        setCurrentPage(1); // Reset seulement si le terme change
+        setCurrentPage(1);
         previousSearchRef.current = searchTerm;
       }
     };
@@ -86,7 +87,6 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
               <p>Aucun comic trouvé pour "{search}"</p>
             ) : (
               <>
-                {/* 🔥 Afficher le nombre de résultats en mode recherche */}
                 {search && (
                   <p style={{ marginBottom: "20px", fontWeight: "bold" }}>
                     {totalCount} résultat(s) trouvé(s) pour "{search}"
@@ -98,11 +98,8 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
                     <article key={comic._id} style={{ position: "relative" }}>
                       <div>
                         <h1>{comic.title}</h1>
-                        <FavoriteButton
-                          item={comic}
-                          isFavorite={isFavorite}
-                          toggleFavorite={toggleFavorite}
-                        />
+                        {/* 🔥 On passe seulement item */}
+                        <FavoriteButton item={comic} />
                       </div>
                       <img
                         src={getImageUrl(comic.thumbnail)}
@@ -117,7 +114,6 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
           </main>
         </>
       )}
-      {/* 🔥 Afficher la pagination UNIQUEMENT si pas de recherche active */}
       {!search && totalPages > 1 && (
         <div className="pagination">
           <button

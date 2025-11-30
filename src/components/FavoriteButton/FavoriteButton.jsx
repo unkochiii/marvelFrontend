@@ -3,8 +3,12 @@ import PropTypes from "prop-types";
 import "./favoriteButton.css";
 import Solid from "../../assets/images/bookmark-solid-full.svg";
 import Empty from "../../assets/images/bookmark-regular-full.svg";
+import { useFavorites } from "../../context/FavoritesContext";
 
-const FavoriteButton = ({ item, isFavorite, toggleFavorite }) => {
+const FavoriteButton = ({ item }) => {
+  // 🔥 Récupérer isFavorite et toggleFavorite du Context
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   // ✅ Vérification que item existe et a un _id
   if (!item || !item._id) {
     console.warn("FavoriteButton: item ou item._id est manquant", item);
@@ -34,7 +38,7 @@ const FavoriteButton = ({ item, isFavorite, toggleFavorite }) => {
   );
 };
 
-// Validation des props
+// 🔥 Validation des props (seulement item maintenant)
 FavoriteButton.propTypes = {
   item: PropTypes.shape({
     _id: PropTypes.string.isRequired,
@@ -42,8 +46,6 @@ FavoriteButton.propTypes = {
     title: PropTypes.string,
     thumbnail: PropTypes.object,
   }).isRequired,
-  isFavorite: PropTypes.func.isRequired,
-  toggleFavorite: PropTypes.func.isRequired,
 };
 
 export default FavoriteButton;

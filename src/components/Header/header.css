@@ -27,10 +27,14 @@ button {
   border-radius: 99px;
   height: 40px;
   padding: 10px;
-  font-size: 16px;
-  color: #861418;
   cursor: pointer;
   background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+button > img {
+  height: 25px;
 }
 
 button:hover {

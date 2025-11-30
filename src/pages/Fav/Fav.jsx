@@ -1,11 +1,13 @@
 // src/pages/Fav/Fav.jsx
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import { useFavorites } from "../../context/FavoritesContext";
 import "./fav.css";
 import Remove from "../../assets/images/circle-minus-solid-full.svg";
 
-const Fav = ({ favorites = [], removeFavorite }) => {
-  // Vérification de la liste vide
+const Fav = () => {
+  // 🔥 Plus besoin de props
+  const { favorites, removeFavorite } = useFavorites(); // 🔥 Utiliser le context
+
   if (favorites.length === 0) {
     return (
       <div className="container">
@@ -17,15 +19,13 @@ const Fav = ({ favorites = [], removeFavorite }) => {
     );
   }
 
-  // Fonction pour obtenir l'URL de l'image de manière sécurisée
   const getImageUrl = (item) => {
     if (item.thumbnail?.path && item.thumbnail?.extension) {
       return `${item.thumbnail.path}.${item.thumbnail.extension}`;
     }
-    return "/placeholder-image.jpg"; // Image par défaut
+    return "/placeholder-image.jpg";
   };
 
-  // Fonction pour obtenir le chemin de navigation
   const getItemPath = (item) => {
     return item.name ? `/character/${item._id}` : `/comic/${item._id}`;
   };
@@ -60,22 +60,6 @@ const Fav = ({ favorites = [], removeFavorite }) => {
       </div>
     </div>
   );
-};
-
-// Validation des props
-Fav.propTypes = {
-  favorites: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      name: PropTypes.string,
-      title: PropTypes.string,
-      thumbnail: PropTypes.shape({
-        path: PropTypes.string,
-        extension: PropTypes.string,
-      }),
-    })
-  ),
-  removeFavorite: PropTypes.func.isRequired,
 };
 
 export default Fav;

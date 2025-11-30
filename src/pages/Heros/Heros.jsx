@@ -1,22 +1,26 @@
+// src/pages/Heros/Heros.jsx
 import axios from "axios";
-import { useState, useEffect, useRef, Fragment } from "react"; // 🔥 Ajout de useRef
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useFavorites } from "../../context/FavoritesContext";
 import getImageUrl from "../../assets/utils/getImgaeUrl";
 import "./heros.css";
 import FavoriteButton from "../../components/FavoriteButton/FavoriteButton";
 
-const Heros = ({ toggleFavorite, isFavorite }) => {
+const Heros = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const navigate = useNavigate();
-  const previousSearchRef = useRef(""); // 🔥 Ajout du ref
+  const previousSearchRef = useRef("");
+
+  // 🔥 On peut garder cette ligne si besoin ailleurs, sinon on peut la retirer
+  // const { toggleFavorite, isFavorite } = useFavorites();
 
   const limit = 100;
 
-  // Fetch data with pagination AND search
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -24,16 +28,13 @@ const Heros = ({ toggleFavorite, isFavorite }) => {
         let url;
 
         if (search) {
-          // 🔥 MODE RECHERCHE : cherche sur TOUTES les pages
           url = `https://site--marvelbackend--t4nqvl4d28d8.code.run/characters?name=${search}`;
         } else {
-          // 📄 MODE PAGINATION : affiche page par page
           const skip = (currentPage - 1) * limit;
           url = `https://site--marvelbackend--t4nqvl4d28d8.code.run/characters?skip=${skip}&limit=${limit}`;
         }
 
         const response = await axios.get(url);
-
         setFilteredData(response.data.results);
         setTotalCount(response.data.count);
         setIsLoading(false);
@@ -43,17 +44,15 @@ const Heros = ({ toggleFavorite, isFavorite }) => {
       }
     };
     fetchData();
-  }, [currentPage, search]); // 🔥 Re-fetch quand currentPage OU search change
+  }, [currentPage, search]);
 
-  // Listen to localStorage changes for search term
   useEffect(() => {
     const handleStorageChange = () => {
       const searchTerm = localStorage.getItem("search") || "";
 
-      // 🔥 Comparer avec la valeur précédente
       if (previousSearchRef.current !== searchTerm) {
         setSearch(searchTerm);
-        setCurrentPage(1); // Reset seulement si le terme change
+        setCurrentPage(1);
         previousSearchRef.current = searchTerm;
       }
     };
@@ -92,7 +91,6 @@ const Heros = ({ toggleFavorite, isFavorite }) => {
               <p>Aucun personnage trouvé pour "{search}"</p>
             ) : (
               <>
-                {/* 🔥 Afficher le nombre de résultats en mode recherche */}
                 {search && (
                   <p style={{ marginBottom: "20px", fontWeight: "bold" }}>
                     {totalCount} résultat(s) trouvé(s) pour "{search}"
@@ -108,11 +106,8 @@ const Heros = ({ toggleFavorite, isFavorite }) => {
                     >
                       <div>
                         <h1 className="name">{character.name}</h1>
-                        <FavoriteButton
-                          item={character}
-                          isFavorite={isFavorite}
-                          toggleFavorite={toggleFavorite}
-                        />
+                        {/* 🔥 On passe seulement item */}
+                        <FavoriteButton item={character} />
                       </div>
                       <img
                         src={getImageUrl(character.thumbnail)}
@@ -127,7 +122,6 @@ const Heros = ({ toggleFavorite, isFavorite }) => {
           </main>
         </>
       )}
-      {/* 🔥 Afficher la pagination UNIQUEMENT si pas de recherche active */}
       {!search && totalPages > 1 && (
         <div className="pagination">
           <button
