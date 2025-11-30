@@ -22,7 +22,10 @@ body {
   display: flex;
   justify-content: center;
   margin: 0;
+  /* width: 100vh; */
+  background-color: rgb(0, 23, 65);
 }
+
 * {
   font-family: "MaPolice", sans-serif;
 }

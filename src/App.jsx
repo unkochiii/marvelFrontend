@@ -7,6 +7,7 @@ import Heros from "./pages/Heros/Heros";
 import Comics from "./pages/Comics/Comics";
 import Character from "./pages/Character/Character";
 import Fav from "./pages/Fav/Fav";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const [favorites, setFavorites] = useState([]);
@@ -95,6 +96,7 @@ function App() {
             }
           />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </>
   );

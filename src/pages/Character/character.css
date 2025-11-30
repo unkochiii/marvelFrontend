@@ -36,3 +36,11 @@
 .comic-card {
   padding: 10px;
 }
+
+.character {
+  height: 100vh;
+}
+.character-detail > h1,
+h2 {
+  color: yellow;
+}

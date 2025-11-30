@@ -1,6 +1,8 @@
 // src/components/FavoriteButton/FavoriteButton.jsx
 import PropTypes from "prop-types";
 import "./favoriteButton.css";
+import Solid from "../../assets/images/bookmark-solid-full.svg";
+import Empty from "../../assets/images/bookmark-regular-full.svg";
 
 const FavoriteButton = ({ item, isFavorite, toggleFavorite }) => {
   // ✅ Vérification que item existe et a un _id
@@ -22,7 +24,12 @@ const FavoriteButton = ({ item, isFavorite, toggleFavorite }) => {
       title={favorited ? "Retirer des favoris" : "Ajouter aux favoris"}
       aria-label={favorited ? "Retirer des favoris" : "Ajouter aux favoris"}
     >
-      {favorited ? "❤️" : "🤍"}
+      {/* 🔥 Utiliser <img> au lieu de template string */}
+      <img
+        src={favorited ? Solid : Empty}
+        alt={favorited ? "Favori ajouté" : "Favori vide"}
+        className="favorite-icon"
+      />
     </button>
   );
 };

@@ -64,7 +64,7 @@ const Character = ({ toggleFavorite, isFavorite }) => {
   }
 
   return (
-    <div className="container">
+    <div className="container character">
       {character && (
         <div className="character-detail">
           <h1>{character.name}</h1>

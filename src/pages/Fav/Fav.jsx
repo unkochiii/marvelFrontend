@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./fav.css";
+import Remove from "../../assets/images/circle-minus-solid-full.svg";
 
 const Fav = ({ favorites = [], removeFavorite }) => {
   // Vérification de la liste vide
@@ -30,9 +31,9 @@ const Fav = ({ favorites = [], removeFavorite }) => {
   };
 
   return (
-    <div className="container">
-      <h1>Mes Favoris ({favorites.length})</h1>
+    <div className="container fav">
       <div className="favorites-grid">
+        <h1>Mes Favoris ({favorites.length})</h1>
         {favorites.map((item) => (
           <article key={item._id} className="favorite-card">
             <button
@@ -41,7 +42,7 @@ const Fav = ({ favorites = [], removeFavorite }) => {
               title="Retirer des favoris"
               aria-label={`Retirer ${item.name || item.title} des favoris`}
             >
-              ✕
+              <img src={Remove} alt="retirer des favoris" />
             </button>
 
             <Link to={getItemPath(item)} className="favorite-link">

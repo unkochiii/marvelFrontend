@@ -1,0 +1,89 @@
+.favorite-card {
+  width: 276px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 15px;
+  box-shadow: 0px 8px 15px white;
+  justify-content: space-between;
+  box-shadow: 0px 4px 15px rgba(229, 255, 0, 0.788);
+  gap: 10px;
+}
+.favorite-link > img {
+  width: 80%;
+  height: 275px;
+  object-fit: contain;
+  border-radius: 15px;
+}
+
+/* je suis obligée sinon ca mélange avec les autres css.... désolé !je suis obligée sinon ca mélange avec les autres css.... désolé! */
+.favorite-card:hover {
+  width: 276px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 15px;
+  box-shadow: 0px 8px 15px white;
+  justify-content: space-between;
+  box-shadow: 0px 4px 15px rgba(217, 255, 0, 0.788);
+}
+.favorite-link:hover > img {
+  width: 80%;
+  height: 275px;
+  object-fit: contain;
+  border-radius: 15px;
+}
+
+/* le torture s'arrete là */
+
+.remove-btn {
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-color: black;
+}
+.remove-btn:hover {
+  background-color: white;
+  border-color: black;
+}
+
+.remove-btn > img {
+  height: 25px;
+}
+
+.favorite-link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.favorites-grid > h1,
+h2 {
+  width: 276px;
+  height: 400px;
+  color: yellow;
+}
+
+.empty-favorites > h1,
+p {
+  color: yellow;
+}
+
+.favorites-grid {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.fav {
+  height: 100vh;
+}
+
+.empty-favorites {
+  height: 100vh;
+}

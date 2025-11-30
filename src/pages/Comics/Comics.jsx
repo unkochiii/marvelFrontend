@@ -1,36 +1,39 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"; // 🔥 Ajout de useRef
 import getImageUrl from "../../assets/utils/getImgaeUrl";
 import "./comics.css";
 import FavoriteButton from "../../components/FavoriteButton/FavoriteButton";
 
 const Comics = ({ toggleFavorite, isFavorite }) => {
-  const [allData, setAllData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const previousSearchRef = useRef(""); // 🔥 Ajout du ref
 
-  const limit = 100; // 100 comics par page
+  const limit = 100;
 
-  // Fetch data with pagination
+  // Fetch data with pagination AND search
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const skip = (currentPage - 1) * limit; // Si page 5, skip = 4 * 100 = 400
+        let url;
 
-        const response = await axios.get(
-          `https://site--marvelbackend--t4nqvl4d28d8.code.run/comics?skip=${skip}&limit=${limit}`
-        );
+        if (search) {
+          // 🔥 MODE RECHERCHE : cherche sur TOUTES les pages
+          url = `https://site--marvelbackend--t4nqvl4d28d8.code.run/comics?title=${search}`;
+        } else {
+          // 📄 MODE PAGINATION : affiche page par page
+          const skip = (currentPage - 1) * limit;
+          url = `https://site--marvelbackend--t4nqvl4d28d8.code.run/comics?skip=${skip}&limit=${limit}`;
+        }
 
-        const results = response.data.results;
-        const count = response.data.count; // Total des comics
+        const response = await axios.get(url);
 
-        setAllData(results);
-        setFilteredData(results);
-        setTotalCount(count);
+        setFilteredData(response.data.results);
+        setTotalCount(response.data.count);
         setIsLoading(false);
       } catch (error) {
         console.log(error.message);
@@ -38,22 +41,23 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
       }
     };
     fetchData();
-  }, [currentPage]); // Re-fetch quand la page change
+  }, [currentPage, search]); // 🔥 Re-fetch quand currentPage OU search change
 
   // Listen to localStorage changes for search term
   useEffect(() => {
     const handleStorageChange = () => {
       const searchTerm = localStorage.getItem("search") || "";
-      setSearch(searchTerm);
+
+      // 🔥 Comparer avec la valeur précédente
+      if (previousSearchRef.current !== searchTerm) {
+        setSearch(searchTerm);
+        setCurrentPage(1); // Reset seulement si le terme change
+        previousSearchRef.current = searchTerm;
+      }
     };
 
-    // Set initial search term
     handleStorageChange();
-
-    // Listen for storage changes from other tabs/windows
     window.addEventListener("storage", handleStorageChange);
-
-    // Polling for same-tab changes (localStorage doesn't fire on same tab)
     const interval = setInterval(handleStorageChange, 100);
 
     return () => {
@@ -62,94 +66,92 @@ const Comics = ({ toggleFavorite, isFavorite }) => {
     };
   }, []);
 
-  // Filter data whenever search term changes
-  useEffect(() => {
-    if (!search) {
-      setFilteredData(allData);
-    } else {
-      const lowerSearch = search.toLowerCase();
-      // Filter by title only
-      const filtered = allData.filter((comic) =>
-        comic.title.toLowerCase().includes(lowerSearch)
-      );
-      // Sort: startsWith first, then contains
-      const sorted = filtered.sort((a, b) => {
-        const aStartsWith = a.title.toLowerCase().startsWith(lowerSearch);
-        const bStartsWith = b.title.toLowerCase().startsWith(lowerSearch);
-        if (aStartsWith && !bStartsWith) return -1;
-        if (!aStartsWith && bStartsWith) return 1;
-        return 0;
-      });
-      setFilteredData(sorted);
-    }
-  }, [search, allData]);
-
   const totalPages = Math.ceil(totalCount / limit);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
-      window.scrollTo(0, 0); // Scroll to top on page change
+      window.scrollTo(0, 0);
     }
   };
 
   return (
     <div className="container comics">
       {isLoading ? (
-        <p>Loading ...</p>
+        <p className="charge">Loading ...</p>
       ) : (
         <>
           <main>
-            {filteredData.map((comic) => {
-              return (
-                <article key={comic._id} style={{ position: "relative" }}>
-                  <FavoriteButton
-                    item={comic}
-                    isFavorite={isFavorite}
-                    toggleFavorite={toggleFavorite}
-                  />
+            {filteredData.length === 0 ? (
+              <p>Aucun comic trouvé pour "{search}"</p>
+            ) : (
+              <>
+                {/* 🔥 Afficher le nombre de résultats en mode recherche */}
+                {search && (
+                  <p style={{ marginBottom: "20px", fontWeight: "bold" }}>
+                    {totalCount} résultat(s) trouvé(s) pour "{search}"
+                  </p>
+                )}
 
-                  <h1>{comic.title}</h1>
-                  <img src={getImageUrl(comic.thumbnail)} alt={comic.title} />
-                  <p className="description">{comic.description}</p>
-                </article>
-              );
-            })}
-            <div className="pagination">
-              <button
-                onClick={() => handlePageChange(1)}
-                disabled={currentPage === 1}
-              >
-                First
-              </button>
-
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-
-              <span className="page-info">
-                Page {currentPage} of {totalPages}
-              </span>
-
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-
-              <button
-                onClick={() => handlePageChange(totalPages)}
-                disabled={currentPage === totalPages}
-              >
-                Last
-              </button>
-            </div>
+                {filteredData.map((comic) => {
+                  return (
+                    <article key={comic._id} style={{ position: "relative" }}>
+                      <div>
+                        <h1>{comic.title}</h1>
+                        <FavoriteButton
+                          item={comic}
+                          isFavorite={isFavorite}
+                          toggleFavorite={toggleFavorite}
+                        />
+                      </div>
+                      <img
+                        src={getImageUrl(comic.thumbnail)}
+                        alt={comic.title}
+                      />
+                      <p className="description">{comic.description}</p>
+                    </article>
+                  );
+                })}
+              </>
+            )}
           </main>
         </>
+      )}
+      {/* 🔥 Afficher la pagination UNIQUEMENT si pas de recherche active */}
+      {!search && totalPages > 1 && (
+        <div className="pagination">
+          <button
+            onClick={() => handlePageChange(1)}
+            disabled={currentPage === 1}
+          >
+            First
+          </button>
+
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+
+          <span className="page-info">
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+
+          <button
+            onClick={() => handlePageChange(totalPages)}
+            disabled={currentPage === totalPages}
+          >
+            Last
+          </button>
+        </div>
       )}
     </div>
   );

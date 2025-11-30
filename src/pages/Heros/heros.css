@@ -12,8 +12,8 @@ article {
   align-items: center;
   flex-direction: column;
   border-radius: 15px;
-  box-shadow: 0px 8px 15px white;
-  justify-content: space-evenly;
+  box-shadow: 0px 8px 15px rgb(238, 255, 0);
+  justify-content: space-between;
 }
 
 article > img {
@@ -30,3 +30,63 @@ article > img {
 article:hover {
   overflow: visible;
 }
+
+article > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  /* margin-left: 65px; */
+  /* border: 2px red solid; */
+  flex-shrink: 0;
+  height: 50px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+article:hover > div {
+  overflow: visible;
+  /* margin-bottom: 10px; */
+  height: auto;
+}
+/* .general {
+  display: flex;
+  flex-direction: column;
+} */
+
+.heros {
+  display: flex;
+  flex-direction: column;
+  /* background-color: white; */
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin: 25px;
+  margin-right: 0px;
+  align-items: center;
+  gap: 10px;
+  color: white;
+}
+
+.pagination > button {
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  color: black;
+  border-color: black;
+}
+.pagination > button:hover {
+  background-color: red;
+  color: yellow;
+  border-color: blue;
+}
+
+.charge {
+  color: yellow;
+}
+/* .name {
+  overflow: hidden;
+} */
